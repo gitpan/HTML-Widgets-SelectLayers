@@ -1,5 +1,8 @@
 Revision history for Perl extension HTML::Widgets::SelectLayers.
 
+0.02  Thu May  9 03:05:15 2002
+	- enable form_select
+
 0.01  Thu Mar  7 04:36:46 2002
 	- original version; created by h2xs 1.21 with options
 		-A -X -n HTML::Widgets::SelectLayers

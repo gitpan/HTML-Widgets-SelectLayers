@@ -14,7 +14,7 @@ tie my %o, 'Tie::IxHash',
 
 my %html = (
 
-  'download' => '<A HREF="HTML-Widgets-SelectLayers-0.01.tar.gz">Download HTML-Widgets-SelectLayers-0.01.tar.gz</a>',
+  'download' => '<A HREF="HTML-Widgets-SelectLayers-0.02.tar.gz">Download HTML-Widgets-SelectLayers-0.02.tar.gz</a>',
 
   'installation' => '<PRE>
   perl Makefile.PL

@@ -3,7 +3,7 @@ package HTML::Widgets::SelectLayers;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 =head1 NAME
 
@@ -22,7 +22,7 @@ HTML::Widgets::SelectLayers - Perl extension for selectable HTML layers
   $widget = new HTML::Widgets::SelectLayers(
     'options'       => \%options,
     'form_name'     => 'dummy',
-    'form_actoin'   => 'process.cgi',
+    'form_action'   => 'process.cgi',
     'form_text'     => [ qw( textfield1 textfield2 ) ],
     'form_checkbox' => [ qw( checkbox1 ) ],
     'layer_callback' => sub {
@@ -87,10 +87,11 @@ form_text - (optional) Array reference of text (or hidden) form fields to copy
 form_checkbox - (optional) Array reference of checkbox form fields to copy from
                 the B<form_name> form.
 
+form_select - (optional) Array reference of select (not select multiple) form
+              fields to copy from the B<form_name> form.
+
 fixup_callback - (optional) subroutine reference, returns supplimentary
                  JavaScript for the function described above under FORMS.
-
-#form_select
 
 size - (optional) size of the E<lt>SELECTE<gt>, default 1.
 
@@ -126,6 +127,8 @@ sub html {
     exists($self->{form_text}) ? $self->{form_text} : [];
   my $form_checkbox =
     exists($self->{form_checkbox}) ? $self->{form_checkbox} : [];
+  my $form_select =
+    exists($self->{form_select}) ? $self->{form_select} : [];
 
   my $html = $self->_safeonload.
              $self->_visualize.
@@ -156,7 +159,7 @@ END
     $html .= <<END;
       <FORM NAME="${key}$layer" ACTION="$form_action" METHOD=POST onSubmit="${key}fixup(this)">
 END
-    foreach my $f ( @$form_text, @$form_checkbox ) {
+    foreach my $f ( @$form_text, @$form_checkbox, @$form_select ) {
       $html .= <<END;
         <INPUT TYPE="hidden" NAME="$f" VALUE="">
 END
@@ -191,6 +194,8 @@ sub _fixup {
     exists($self->{form_text}) ? $self->{form_text} : [];
   my $form_checkbox =
     exists($self->{form_checkbox}) ? $self->{form_checkbox} : [];
+  my $form_select =
+    exists($self->{form_select}) ? $self->{form_select} : [];
   my $html = "
     <SCRIPT>
     function ${key}fchanged(what) {
@@ -209,9 +214,9 @@ sub _fixup {
                 what.$f.value = '';\n"
   }
 
-#  foreach my $f ( @$form_select ) {
-#    $html .= "what.$f.value = document.$form_name.$f.options[document.$form_name.$f.selectedIndex].value;\n";
-#  }
+  foreach my $f ( @$form_select ) {
+    $html .= "what.$f.value = document.$form_name.$f.options[document.$form_name.$f.selectedIndex].value;\n";
+  }
 
   $html .= &{$self->{fixup_callback}}() if exists($self->{fixup_callback});
 
