@@ -3,7 +3,7 @@ package HTML::Widgets::SelectLayers;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 =head1 NAME
 
@@ -227,8 +227,8 @@ sub _fixup {
   foreach my $f ( @$form_radio ) {
     $html .= "what.$f.value = '';
               for ( i=0; i< document.$form_name.$f.length; i++ )
-                if ( document.$form_name.${f}[i].checked )
-                  what.$f.value = document.$form_name.${f}[i].value;\n";
+                if ( document.$form_name.$f\[i].checked )
+                  what.$f.value = document.$form_name.$f\[i].value;\n";
   }
 
   foreach my $f ( @$form_select ) {

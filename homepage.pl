@@ -14,7 +14,7 @@ tie my %o, 'Tie::IxHash',
 
 my %html = (
 
-  'download' => '<A HREF="HTML-Widgets-SelectLayers-0.03.tar.gz">Download HTML-Widgets-SelectLayers-0.03.tar.gz</a>',
+  'download' => '<A HREF="HTML-Widgets-SelectLayers-0.04.tar.gz">Download HTML-Widgets-SelectLayers-0.04.tar.gz</a>',
 
   'installation' => '<PRE>
   perl Makefile.PL
@@ -25,9 +25,9 @@ my %html = (
 
 'cvs' => '<PRE>
 Anonymous CVS access is available:
-  $ export CVSROOT=":pserver:anonymous@cleanwhisker.420.am:/home/cvs/cvsroot"
+  $ export CVSROOT=":pserver:anonymous@pouncequick.420.am:/home/cvs/cvsroot"
   $ cvs login
-  (Logging in to anonymous@cleanwhisker.420.am
+  (Logging in to anonymous@pouncequick.420.am
   CVS password: anonymous
   $ cvs checkout DBIx-DBSchema
 as well as <A HREF="http://www.420.am/cgi-bin/cvsweb/HTML-Widgets-SelectLayers">browsable via cvsweb</A>.
