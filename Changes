@@ -1,5 +1,8 @@
 Revision history for Perl extension HTML::Widgets::SelectLayers.
 
+0.03  Fri Jan 30 20:51:14 2004
+	- add form_radio
+
 0.02  Thu May  9 03:05:15 2002
 	- enable form_select
 

@@ -3,7 +3,7 @@ package HTML::Widgets::SelectLayers;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 =head1 NAME
 
@@ -25,6 +25,8 @@ HTML::Widgets::SelectLayers - Perl extension for selectable HTML layers
     'form_action'   => 'process.cgi',
     'form_text'     => [ qw( textfield1 textfield2 ) ],
     'form_checkbox' => [ qw( checkbox1 ) ],
+    'form_radio'    => [ qw( radio1 ) ],
+    'form_select'   => [ qw( select1 ) ],
     'layer_callback' => sub {
       my $layer = shift;
       my $html = qq!<INPUT TYPE="hidden" NAME="layer" VALUE="$layer">!;
@@ -87,6 +89,9 @@ form_text - (optional) Array reference of text (or hidden) form fields to copy
 form_checkbox - (optional) Array reference of checkbox form fields to copy from
                 the B<form_name> form.
 
+form_radio - (optional) Array reference of radio form fields to copy from the
+             B<form_name> form.
+
 form_select - (optional) Array reference of select (not select multiple) form
               fields to copy from the B<form_name> form.
 
@@ -127,6 +132,8 @@ sub html {
     exists($self->{form_text}) ? $self->{form_text} : [];
   my $form_checkbox =
     exists($self->{form_checkbox}) ? $self->{form_checkbox} : [];
+  my $form_radio =
+    exists($self->{form_radio}) ? $self->{form_radio} : [];
   my $form_select =
     exists($self->{form_select}) ? $self->{form_select} : [];
 
@@ -159,7 +166,8 @@ END
     $html .= <<END;
       <FORM NAME="${key}$layer" ACTION="$form_action" METHOD=POST onSubmit="${key}fixup(this)">
 END
-    foreach my $f ( @$form_text, @$form_checkbox, @$form_select ) {
+    foreach my $f ( @$form_text, @$form_checkbox, @$form_radio, @$form_select )
+    {
       $html .= <<END;
         <INPUT TYPE="hidden" NAME="$f" VALUE="">
 END
@@ -194,6 +202,8 @@ sub _fixup {
     exists($self->{form_text}) ? $self->{form_text} : [];
   my $form_checkbox =
     exists($self->{form_checkbox}) ? $self->{form_checkbox} : [];
+  my $form_radio =
+    exists($self->{form_radio}) ? $self->{form_radio} : [];
   my $form_select =
     exists($self->{form_select}) ? $self->{form_select} : [];
   my $html = "
@@ -212,6 +222,13 @@ sub _fixup {
                 what.$f.value = document.$form_name.$f.value;
               else
                 what.$f.value = '';\n"
+  }
+
+  foreach my $f ( @$form_radio ) {
+    $html .= "what.$f.value = '';
+              for ( i=0; i< document.$form_name.$f.length; i++ )
+                if ( document.$form_name.${f}[i].checked )
+                  what.$f.value = document.$form_name.${f}[i].value;\n";
   }
 
   foreach my $f ( @$form_select ) {
