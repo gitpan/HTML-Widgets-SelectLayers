@@ -1,5 +1,11 @@
 Revision history for Perl extension HTML::Widgets::SelectLayers.
 
+0.05 Wed Aug 24 06:31:24 PDT 2005
+	- Long overdue: remove NN4 support.
+	- Add under_position option, based on a patch from Ricardo SIGNES
+	- set zIndex foo, hopefully selected layer will be active in IE
+	  properly now
+
 0.04  Fri Jan 30 23:23:28 2004
 	- fix for pre-5.8 versions.  *sigh*
 
