@@ -1,5 +1,9 @@
 Revision history for Perl extension HTML::Widgets::SelectLayers.
 
+0.06 Wed Dec 20 01:50:00 PST 2006
+        - Also long overdue: add auto-sensing of form field types, pass
+          "form_elements" instead of the old form_* options.
+
 0.05 Wed Aug 24 06:31:24 PDT 2005
 	- Long overdue: remove NN4 support.
 	- Add under_position option, based on a patch from Ricardo SIGNES
