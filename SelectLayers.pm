@@ -3,7 +3,7 @@ package HTML::Widgets::SelectLayers;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = '0.06';
+$VERSION = '0.07';
 
 =head1 NAME
 
@@ -93,9 +93,8 @@ form_action - Form action
 
 form_elements - (optional) Array reference of form fields to copy from the
                 B<form_name> form.  Field type is autodetected; currently
-                text, hidden, checkbox, and select (single) fiels are
-                supported.  Select (multiple) and radio fields are not yet
-                supported.
+                text, hidden, checkbox, and select fields are
+                supported.  Radio fields are not yet supported.
 
 form_text - (optional) Array reference of text (or hidden) form fields to copy
             from the B<form_name> form.
@@ -106,8 +105,8 @@ form_checkbox - (optional) Array reference of checkbox form fields to copy from
 form_radio - (optional) Array reference of radio form fields to copy from the
              B<form_name> form.
 
-form_select - (optional) Array reference of select (not select multiple) form
-              fields to copy from the B<form_name> form.
+form_select - (optional) Array reference of select form fields to copy from
+             the B<form_name> form.
 
 fixup_callback - (optional) subroutine reference, returns supplimentary
                  JavaScript for the function described above under FORMS.
@@ -184,7 +183,7 @@ END
 
     #form fields
     $html .= <<END;
-      <FORM NAME="${key}$layer" ACTION="$form_action" METHOD=POST onSubmit="${key}fixup(this)" STYLE="margin-top: 0; margin-bottom: 0">
+      <FORM NAME="${key}$layer" ACTION="$form_action" METHOD=POST onsubmit="${key}fixup(this)" STYLE="margin-top: 0; margin-bottom: 0">
 END
     foreach my $f ( @$form_elements, @$form_text, @$form_checkbox, @$form_radio, @$form_select )
     {
@@ -239,11 +238,30 @@ sub _fixup {
     <SCRIPT>
 
 function copyelement(from, to) {
-  if ( from == undefined ) {
+  if ( from.type == undefined ) {
     to.value = '';
   } else if ( from.type == 'select-one' ) {
     to.value = from.options[from.selectedIndex].value;
     //alert(from + " (" + from.type + "): " + to.name + " => (" + from.selectedIndex + ") " + to.value);
+  } else if ( from.type == 'select-multiple' ) {
+    var i = 0;
+    var count = 0;
+    var values = new Array();
+    for (i=0;i<from.length;i++) {
+      if (from.options[i].selected){
+        values[count++] = from.options[i].value;
+      }
+    }
+    for (i=0;i<values.length-1;i++) {
+      var clone = to.cloneNode(true);
+      clone.value = values[i];
+      to.form.appendChild(clone);
+    }
+    if (count > 0) {
+      to.value = values[values.length-1];
+    }else{
+      to.value = '';
+    }
   } else if ( from.type == 'checkbox' ) {
     if ( from.checked ) {
       to.value = from.value;
@@ -263,9 +281,9 @@ function copyelement(from, to) {
 END
 
   $html .= "
-    function ${key}fchanged(what) {
-      ${key}fixup(what.form);
-    }
+    //function ${key}fchanged(what) {
+    //  ${key}fixup(what.form);
+    //}
     function ${key}fixup(what) {\n";
 
   foreach my $f ( @$form_elements ) {
